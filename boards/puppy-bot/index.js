@@ -6,23 +6,6 @@ addBoard({
     uploadMode: "MSC",
     mscSize: 1417216,
     chip: "RP2",
-    pins_define: {
-        digital: [
-            [ "D1", "25" ],
-            [ "D2", "27" ],
-            [ "D3", "28" ],
-            [ "D4", "29" ],
-            [ "S1", "12" ],
-            [ "S2", "13" ],
-            [ "S3", "14" ],
-            [ "S4", "15" ],
-        ],
-        analog: [
-            [ "A8", "27" ],
-            [ "A9", "28" ],
-            [ "A10", "29" ],
-        ],
-    },
     script: [ 
         "../kidbright32/js/field_note.js",
         "../kidbright32/js/sound.js",
@@ -55,7 +38,7 @@ addBoard({
             name: "MicroPython for PupyBot v1.19.1-796-gf4811b0b4-dirty",
             path: "firmware/MicroPython.for.PuppyBot.v1.19.1-796-gf4811b0b4-dirty.uf2",
             version: "v1.19.1-796-gf4811b0b4-dirty",
-            date: "2023-10-05",
+            date: "2023-01-28",
             board: "Raspberry Pi Pico",
             cpu: "RP2040"
         },
@@ -596,13 +579,6 @@ addBoard({
                         },
                         {
                             xml: `
-                                <block type="math_number">
-                                    <field name="NUM">0</field>
-                                </block>
-                            `
-                        },
-                        {
-                            xml: `
                                 <block type="math_arithmetic">
                                     <value name="A">
                                         <shadow type="math_number">
@@ -727,13 +703,6 @@ addBoard({
                         },
                         {
                             xml: '<label text="Logic"></label>',
-                        },
-                        {
-                            xml: `
-                                <block type="logic_boolean">
-                                    <field name="BOOL">TRUE</field>
-                                </block>
-                            `
                         },
                         {
                             xml: `

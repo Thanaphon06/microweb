@@ -4,39 +4,6 @@ addBoard({
     description: "",
     image: "images/cover.jpg",
     chip: "ESP32",
-    pins_define: {
-        digital: [
-            [ "P0", "25" ],
-            [ "P1", "32" ],
-            [ "P2", "33" ],
-            [ "P3", "13" ],
-            [ "P4", "27" ],
-            [ "P5", "5" ],
-            [ "P8", "4" ],
-            [ "P10", "14" ],
-            [ "P11", "12" ],
-            [ "P12", "15" ],
-            [ "P13", "18" ],
-            [ "P14", "19" ],
-            [ "P15", "23" ],
-            [ "P16", "2" ],
-        ],
-        analog: [
-            [ "P0", "25" ],
-            [ "P1", "32" ],
-            [ "P2", "33" ],
-            [ "P3", "13" ],
-            [ "P4", "27" ],
-            [ "P6", "34" ],
-            [ "P7", "35" ],
-            [ "P8", "4" ],
-            [ "P9", "36" ],
-            [ "P10", "14" ],
-            [ "P11", "12" ],
-            [ "P12", "15" ],
-            [ "P16", "2" ],
-        ],
-    },
     script: [ 
         "../mbits/js/colorpicker.js",
 
@@ -486,13 +453,6 @@ addBoard({
                         },
                         {
                             xml: `
-                                <block type="math_number">
-                                    <field name="NUM">0</field>
-                                </block>
-                            `
-                        },
-                        {
-                            xml: `
                                 <block type="math_arithmetic">
                                     <value name="A">
                                         <shadow type="math_number">
@@ -617,13 +577,6 @@ addBoard({
                         },
                         {
                             xml: '<label text="Logic"></label>',
-                        },
-                        {
-                            xml: `
-                                <block type="logic_boolean">
-                                    <field name="BOOL">TRUE</field>
-                                </block>
-                            `
                         },
                         {
                             xml: `
