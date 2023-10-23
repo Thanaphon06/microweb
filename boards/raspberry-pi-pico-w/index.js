@@ -176,13 +176,6 @@ addBoard({
                         },
                         {
                             xml: `
-                                <block type="math_number">
-                                    <field name="NUM">0</field>
-                                </block>
-                            `
-                        },
-                        {
-                            xml: `
                                 <block type="math_arithmetic">
                                     <value name="A">
                                         <shadow type="math_number">
@@ -307,13 +300,6 @@ addBoard({
                         },
                         {
                             xml: '<label text="Logic"></label>',
-                        },
-                        {
-                            xml: `
-                                <block type="logic_boolean">
-                                    <field name="BOOL">TRUE</field>
-                                </block>
-                            `
                         },
                         {
                             xml: `
