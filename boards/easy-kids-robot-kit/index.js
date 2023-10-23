@@ -7,40 +7,18 @@ Blockly.Events.disableOrphansCustom = function (event) {
         var workspace = Blockly.Workspace.getById(event.workspaceId);
         var block = workspace.getBlockById(event.blockId);
         if (block) {
-            if (!workspace.isDragging()) {
-                let block_is_valid = false;
-
-                const valid_top_block = [ 
-                    "controls_on_start", 
-                    "controls_forever_no_connect", 
-                    "procedures_defnoreturn",
-                    "procedures_defreturn",
-                    "procedures_mutatorcontainer",
-                    "procedures_mutatorarg",
-                ];
-
-                if (valid_top_block.indexOf(block.type) >= 0) {
-                    block_is_valid = true;
-                } else {
-                    // Find parent block
-                    let parent = block.getParent();
-                    // console.log("first parent", block.type, parent);
-                    while (parent) {
-                        // console.log("loop parent", block.type, parent.type);
-                        if (valid_top_block.indexOf(parent.type) >= 0) {
-                            block_is_valid = true;
-                            break;
-                        }
-                        parent = parent.getParent();
-                    }
-                }
-
-                // Enable / Disable block
-                block.setEnabled(block_is_valid);
+            var parent = block.getParent();
+            if ((parent && parent.isEnabled()) || ([ "controls_on_start", "controls_forever_no_connect" ].indexOf(block.type) >= 0)) {
                 var children = block.getDescendants(false);
                 for (var i = 0, child; (child = children[i]); i++) {
-                    child.setEnabled(block_is_valid);
+                    child.setEnabled(true);
                 }
+            } else if ((block.outputConnection || block.previousConnection) &&
+                !workspace.isDragging()) {
+                do {
+                    block.setEnabled(false);
+                    block = block.getNextBlock();
+                } while (block);
             }
         }
     }
@@ -70,7 +48,6 @@ addBoard({
         "../kidbright32/blocks/blocks_buzzer.js",
         "blocks/blocks_pin.js",
         "blocks/blocks_rgbled.js",
-        "blocks/blocks_gamepad.js",
         "blocks/blocks_advanced.js",
         "blocks/blocks_color.js",
 
@@ -82,24 +59,15 @@ addBoard({
         "blocks/generators_buzzer.js",
         "blocks/generators_pin.js",
         "blocks/generators_rgbled.js",
-        "blocks/generators_gamepad.js",
         "../kidbright32/blocks/generators_avanced.js",
     ],
     modules: [ ],
     firmware: [
         {
-            name: "MicroPython (Gamepad) for EasyKids Robot Kit v1.2.0-dirty",
-            path: "firmware/MicroPython.for.EasyKids.Robot.Kit.v1.2.0-dirty-1.bin",
-            version: "v1.2.0-dirty",
-            date: "2023-09-15",
-            board: "EasyKids Robot Kit",
-            cpu: "ESP32"
-        },
-        {
-            name: "MicroPython (No Gamepad) for EasyKids Robot Kit V1.9.1-5-g79adb87da-dirty",
+            name: "MicroPython for EasyKids Robot Kit V1.9.1-5-g79adb87da-dirty",
             path: "firmware/MicroPython.for.EasyKids.Robot.Kit.V1.9.1-5-g79adb87da-dirty.bin",
             version: "V1.9.1-5-g79adb87da-dirty",
-            date: "2023-07-22",
+            date: "2023-05-07",
             board: "EasyKids Robot Kit",
             cpu: "ESP32"
         },
@@ -243,38 +211,6 @@ addBoard({
                         },
                         {
                             xml: `
-                                <block type="motor_slide_left">
-                                    <value name="speed">
-                                        <shadow type="math_number">
-                                            <field name="NUM">50</field>
-                                        </shadow>
-                                    </value>
-                                    <value name="time">
-                                        <shadow type="math_number">
-                                            <field name="NUM">1</field>
-                                        </shadow>
-                                    </value>
-                                </block>
-                            `
-                        },
-                        {
-                            xml: `
-                                <block type="motor_slide_right">
-                                    <value name="speed">
-                                        <shadow type="math_number">
-                                            <field name="NUM">50</field>
-                                        </shadow>
-                                    </value>
-                                    <value name="time">
-                                        <shadow type="math_number">
-                                            <field name="NUM">1</field>
-                                        </shadow>
-                                    </value>
-                                </block>
-                            `
-                        },
-                        {
-                            xml: `
                                 <block type="motor_move">
                                     <value name="speed">
                                         <shadow type="math_number">
@@ -293,16 +229,6 @@ addBoard({
                                         </shadow>
                                     </value>
                                     <value name="speed2">
-                                        <shadow type="math_number">
-                                            <field name="NUM">50</field>
-                                        </shadow>
-                                    </value>
-                                    <value name="speed3">
-                                        <shadow type="math_number">
-                                            <field name="NUM">50</field>
-                                        </shadow>
-                                    </value>
-                                    <value name="speed4">
                                         <shadow type="math_number">
                                             <field name="NUM">50</field>
                                         </shadow>
@@ -480,13 +406,6 @@ addBoard({
                         },
                         {
                             xml: `
-                                <block type="colour_picker">
-                                    <field name="COLOUR">#FF0000</field>
-                                </block>
-                            `
-                        },
-                        {
-                            xml: `
                                 <block type="colour_rgb">
                                     <value name="RED">
                                     <shadow type="math_number">
@@ -517,6 +436,7 @@ addBoard({
                         {
                             xml: '<label text="RGBLED"></label>',
                         },
+                        "rgbled_setup",
                         {
                             xml: `
                                 <block type="rgbled_set_color">
@@ -600,20 +520,6 @@ addBoard({
                     ]
                 },
                 {
-                    name: "Gamepad",
-                    icon: "images/gamepad.png",
-                    color: "#e64c3c",
-                    blocks: [
-                        "gamepad_is_connected",
-                        "gamepad_forget_keys",
-                        "gamepad_enable_new_bluetooth_connections",
-                        "gamepad_axis",
-                        "gamepad_button_is_press",
-                        // "gamepad_temperature", // not work on Gamepad
-                        "gamepad_battery_level",
-                    ]
-                },
-                {
                     name: "I/O",
                     icon: "/images/icon/led.png",
                     color: "#e64c3c",
@@ -621,7 +527,7 @@ addBoard({
                         {
                             xml: '<label text="Sensor"></label>',
                         },
-                        "easy_kids_ultrasonic_read",
+                        "ultrasonic_read",
                         {
                             xml: '<label text="Switch"></label>',
                         },
@@ -748,17 +654,7 @@ addBoard({
                                 </block>
                             `
                         },
-                        {
-                            xml: `
-                                <block type="while_loop">
-                                    <value name="condition">
-                                        <shadow type="logic_boolean">
-                                            <field name="BOOL">TRUE</field>
-                                        </shadow>
-                                    </value>
-                                </block>
-                            `
-                        },
+                        "controls_forever",
                         {
                             xml: `
                                 <block type="controls_repeat_ext">
@@ -802,7 +698,6 @@ addBoard({
                         },
                         "controls_wait_until",
                         "controls_whileUntil",
-                        // "controls_flow_statements",
                     ]
                 },
                 {
@@ -815,8 +710,18 @@ addBoard({
                         },
                         {
                             xml: `
-                                <block type="math_number">
-                                    <field name="NUM">0</field>
+                                <block type="math_arithmetic">
+                                    <value name="A">
+                                        <shadow type="math_number">
+                                            <field name="NUM">1</field>
+                                        </shadow>
+                                    </value>
+                                    <field name="OP">ADD</field>
+                                    <value name="B">
+                                        <shadow type="math_number">
+                                            <field name="NUM">1</field>
+                                        </shadow>
+                                    </value>
                                 </block>
                             `
                         },
@@ -828,7 +733,41 @@ addBoard({
                                             <field name="NUM">1</field>
                                         </shadow>
                                     </value>
-                                    <field name="OP">ADD</field>
+                                    <field name="OP">MINUS</field>
+                                    <value name="B">
+                                        <shadow type="math_number">
+                                            <field name="NUM">1</field>
+                                        </shadow>
+                                    </value>
+                                </block>
+                            `
+                        },
+                        {
+                            xml: `
+                                <block type="math_arithmetic">
+                                    <value name="A">
+                                        <shadow type="math_number">
+                                            <field name="NUM">1</field>
+                                        </shadow>
+                                    </value>
+                                    <field name="OP">MULTIPLY</field>
+                                    <value name="B">
+                                        <shadow type="math_number">
+                                            <field name="NUM">1</field>
+                                        </shadow>
+                                    </value>
+                                </block>
+                            `
+                        },
+                        {
+                            xml: `
+                                <block type="math_arithmetic">
+                                    <value name="A">
+                                        <shadow type="math_number">
+                                            <field name="NUM">1</field>
+                                        </shadow>
+                                    </value>
+                                    <field name="OP">DIVIDE</field>
                                     <value name="B">
                                         <shadow type="math_number">
                                             <field name="NUM">1</field>
@@ -926,13 +865,6 @@ addBoard({
                         },
                         {
                             xml: '<label text="Logic"></label>',
-                        },
-                        {
-                            xml: `
-                                <block type="logic_boolean">
-                                    <field name="BOOL">TRUE</field>
-                                </block>
-                            `
                         },
                         {
                             xml: `

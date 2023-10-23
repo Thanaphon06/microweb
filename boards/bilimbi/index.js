@@ -1,37 +1,46 @@
 addBoard({
-    id: "esp32-dev-board",
-    name: "ESP32 Dev Board",
+    id: "bilimbi",
+    name: "BILIMBI",
     description: "",
     image: "images/cover.jpg",
-    chip: "ESP32",
+    uploadMode: "REPL",
+    chip: "RP2",
     script: [ 
-        // "js/field_bitmap.js",
+        
     ],
     css: [
-        // "css/field_bitmap.css",
+       
     ],
     blocks: [
+        "blocks/blocks_sht40.js",
+        "blocks/blocks_imu.js",
+        "blocks/blocks_gerora.js",
         "blocks/blocks_pin.js",
         "blocks/blocks_advanced.js",
+        "blocks/blocks_colour.js",
 
+        "blocks/generators_sht40.js",
+        "blocks/generators_imu.js",
+        "blocks/generators_gerora.js",
         "blocks/generators_pin.js",
-        "blocks/generators_avanced.js"
+        "blocks/generators_avanced.js",
+        "blocks/generators_colour.js"
     ],
     modules: [ ],
     firmware: [
         {
-            name: "MicroPython for ESP32 Dev Board V1.6.0",
-            path: "firmware/MicroPython.for.ESP32.Dev.Board.V1.6.0.bin",
-            version: "V1.6.0",
-            date: "2021-1-30",
-            board: "ESP32 Dev Board",
-            cpu: "ESP32"
+            name: "MicroPython for BILIMBI V1.6.0-3-g052467e17",
+            path: "firmware/MicroPython.for.BILIMBI.V1.6.0-3-g052467e17.uf2",
+            version: "V1.6.0-3-g052467e17",
+            date: "2021-03-26",
+            board: "BILIMBI",
+            cpu: "RP2040"
         }
     ],
     usb: [
-        { // CP2104
-            vendorId: "10C4",
-            productId: "EA60"
+        {
+            vendorId: "2E8A",
+            productId: "0005"
         }
     ],
     autoCompletion: { },
@@ -42,22 +51,10 @@ addBoard({
             icon: "../kidbright32/images/puzzle.png",
             blocks: [
                 {
-                    name: "Basic",
+                    name: "Pin",
                     icon: "/images/icon/led.png",
                     color: "#e64c3c",
                     blocks: [
-                        "controls_forever",
-                        {
-                            xml: `
-                                <block type="controls_wait">
-                                    <value name="time">
-                                        <shadow type="math_number">
-                                            <field name="NUM">1</field>
-                                        </shadow>
-                                    </value>
-                                </block>
-                            `
-                        },
                         {
                             xml: `
                                 <block type="pin_digital_write">
@@ -68,7 +65,7 @@ addBoard({
                                     </value>
                                     <value name="pin">
                                         <shadow type="math_number">
-                                            <field name="NUM">12</field>
+                                            <field name="NUM">13</field>
                                         </shadow>
                                     </value>
                                 </block>
@@ -84,7 +81,7 @@ addBoard({
                                     </value>
                                     <value name="pin">
                                         <shadow type="math_number">
-                                            <field name="NUM">12</field>
+                                            <field name="NUM">13</field>
                                         </shadow>
                                     </value>
                                 </block>
@@ -95,7 +92,7 @@ addBoard({
                                 <block type="pin_digital_read">
                                     <value name="pin">
                                         <shadow type="math_number">
-                                            <field name="NUM">12</field>
+                                            <field name="NUM">5</field>
                                         </shadow>
                                     </value>
                                 </block>
@@ -106,64 +103,82 @@ addBoard({
                                 <block type="pin_analog_read">
                                     <value name="pin">
                                         <shadow type="math_number">
-                                            <field name="NUM">34</field>
+                                            <field name="NUM">5</field>
+                                        </shadow>
+                                    </value>
+                                </block>
+                            `
+                        },
+                    ]
+                },
+                {
+                    name: "Sensor",
+                    icon: `images/thermometer.png`,
+                    color: "#fbbd5e",
+                    blocks: [
+                        {
+                            xml: '<label text="SHT40"></label>',
+                        },
+                        "sht40_temperature",
+                        "sht40_humidity",
+                        {
+                            xml: '<label text="IMU"></label>',
+                        },
+                        "imu_update",
+                        // "imu_on_gesture",
+                        "imu_is_gesture",
+                        "imu_acceleration",
+                        "imu_rotation",
+                        "imu_raw_gyro",
+                    ]
+                },
+                {
+                    name: "Gerora",
+                    icon: `images/rgb.png`,
+                    color: "#fbbd5e",
+                    blocks: [
+                        "gerora_set_color1",
+                        {
+                            xml: `
+                                <block type="gerora_set_color2">
+                                    <value name="red">
+                                        <shadow type="math_number">
+                                            <field name="NUM">0</field>
+                                        </shadow>
+                                    </value>
+                                    <value name="green">
+                                        <shadow type="math_number">
+                                            <field name="NUM">0</field>
+                                        </shadow>
+                                    </value>
+                                    <value name="blue">
+                                        <shadow type="math_number">
+                                            <field name="NUM">0</field>
+                                        </shadow>
+                                    </value>
+                                </block>
+                            `
+                        },
+                        "gerora_clear",
+                        {
+                            xml: `
+                                <block type="gerora_rainbow">
+                                    <value name="wait">
+                                        <shadow type="math_number">
+                                            <field name="NUM">30</field>
                                         </shadow>
                                     </value>
                                 </block>
                             `
                         },
                         {
-                            xml: '<label text="Blink Code"></label>',
-                        },
-                        {
                             xml: `
-                                <block type="controls_forever">
-                                    <statement name="block">
-                                        <block type="pin_digital_write">
-                                            <value name="value">
-                                                <shadow type="math_number">
-                                                    <field name="NUM">1</field>
-                                                </shadow>
-                                            </value>
-                                            <value name="pin">
-                                                <shadow type="math_number">
-                                                    <field name="NUM">5</field>
-                                                </shadow>
-                                            </value>
-                                            <next>
-                                                <block type="controls_wait">
-                                                    <value name="time">
-                                                        <shadow type="math_number">
-                                                            <field name="NUM">1</field>
-                                                        </shadow>
-                                                    </value>
-                                                    <next>
-                                                        <block type="pin_digital_write">
-                                                            <value name="value">
-                                                                <shadow type="math_number">
-                                                                    <field name="NUM">0</field>
-                                                                </shadow>
-                                                            </value>
-                                                            <value name="pin">
-                                                                <shadow type="math_number">
-                                                                    <field name="NUM">5</field>
-                                                                </shadow>
-                                                            </value>
-                                                            <next>
-                                                                <block type="controls_wait">
-                                                                    <value name="time">
-                                                                        <shadow type="math_number">
-                                                                            <field name="NUM">1</field>
-                                                                        </shadow>
-                                                                    </value>
-                                                                </block>
-                                                            </next>
-                                                        </block>
-                                                    </next>
-                                                </block>
-                                            </next>
-                                        </block>
-                                    </statement>
+                                <block type="gerora_set_brightness">
+                                    <value name="brightness">
+                                        <shadow type="math_number">
+                                            <field name="NUM">50</field>
+                                        </shadow>
+                                    </value>
                                 </block>
                             `
                         },
@@ -496,7 +511,7 @@ addBoard({
                         {
                             xml: '<label text="Sensor"></label>',
                         },
-                        {
+                        /* {
                             xml: `
                                 <block type="dht_read">
                                     <value name="pin">
@@ -506,7 +521,7 @@ addBoard({
                                     </value>
                                 </block>
                             `
-                        },
+                        }, */
                         {
                             xml: `
                                 <block type="ds18x20_read">
@@ -518,7 +533,7 @@ addBoard({
                                 </block>
                             `
                         },
-                        {
+                        /*{
                             xml: '<label text="Internal RTC"></label>',
                         },
                         {
@@ -564,7 +579,7 @@ addBoard({
                         "rtc_get_day",
                         "rtc_get_month",
                         "rtc_get_year",
-                        "rtc_sync_ntp",
+                        "rtc_sync_ntp",*/
                         {
                             xml: '<label text="Task"></label>',
                         },
@@ -594,7 +609,7 @@ addBoard({
                                 </block>
                             `
                         },
-                        "is_woke_from_deep_sleep",
+                        // "is_woke_from_deep_sleep",
                         "board_reset"
                     ]
                 }

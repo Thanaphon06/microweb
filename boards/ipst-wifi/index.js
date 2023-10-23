@@ -4,25 +4,6 @@ addBoard({
     description: "",
     image: "images/cover.jpg",
     chip: "ESP32",
-    pins_define: {
-        digital: [
-            5,
-            19,
-            23
-        ],
-        digital_input_only: [
-            32,
-            33,
-            34,
-            35
-        ],
-        analog: [
-            32,
-            33,
-            34,
-            35
-        ],
-    },
     script: [ 
         "../kidbright32/js/field_note.js",
         "../kidbright32/js/sound.js",
@@ -431,13 +412,6 @@ addBoard({
                         },
                         {
                             xml: `
-                                <block type="math_number">
-                                    <field name="NUM">0</field>
-                                </block>
-                            `
-                        },
-                        {
-                            xml: `
                                 <block type="math_arithmetic">
                                     <value name="A">
                                         <shadow type="math_number">
@@ -562,13 +536,6 @@ addBoard({
                         },
                         {
                             xml: '<label text="Logic"></label>',
-                        },
-                        {
-                            xml: `
-                                <block type="logic_boolean">
-                                    <field name="BOOL">TRUE</field>
-                                </block>
-                            `
                         },
                         {
                             xml: `

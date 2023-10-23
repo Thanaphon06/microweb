@@ -1,6 +1,6 @@
 Blockly.defineBlocksWithJsonArray([
 {
-  "type": "easy_kids_ultrasonic_read",
+  "type": "ultrasonic_read",
   "message0": "distance (cm)",
   "output": "Number",
   "colour": "#E67E22",
